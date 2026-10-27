@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en-us">
+    <head>
+        <title>AP KTANE - Connection</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="color-scheme" content="light dark" />
+      	<meta name="theme-color" media="(prefers-color-scheme: light)" content="gray" />
+      	<meta name="theme-color" media="(prefers-color-scheme: dark)" content="red" />
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+        <link rel="preconnect" href="https://fonts.googleapis.com">\n<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>\n<link href="https://fonts.googleapis.com/css2?family=Special+Elite&display=swap" rel="stylesheet">
+        <style>
+            body {
+                background-color: #222326;
+                color: #FFFFFF;
+                font-family: "Special Elite";
+            }
+            img {
+                width: 100%;
+            }
+            input {
+                font-size: 24px;
+            }
+            label {
+                font-size: 24px;
+                margin-bottom: .0rem;
+            }
+            span {
+                width: 100%;
+                display: block;
+            }
+            textarea {
+                width: 100%;
+            }
+
+            .button {
+                background-color: #BA4423;
+                border-radius: 2.5em;
+                font-size: 36px;
+                width: 100%;
+                margin-top: 5px;
+                margin-bottom: 10px;
+            }
+            .container {
+                margin: 0px;
+                max-width: 100%;
+            }
+            .connection-section {
+                background-color: #FFFFFF;
+                color: #222326;
+                border-radius: 2.5em;
+                margin: 20px 0px 10px 0px;
+            }
+            .error {
+                border-color: #FF0000;
+            }
+            .input-field-row {
+                margin: 3px 0px;
+            }
+            .text-input {
+                width: 100%;
+            }
+            .title {
+                font-size: 48px;
+                text-align: center;
+            }
+            @media(prefers-color-scheme: dark) {
+            }
+        </style>
+        <script>
+            function storeCookies(urlStr, portStr, nameStr) {
+                const d = new Date();
+                d.setTime(d.getTime() + 1209600000); //two weeks (this should be configured in config.ini)
+                coo = "url=" + urlStr + ";port=" + portStr + ";slotName=" + nameStr + ";expires=" + d.toUTCString() + ";path=/"
+                //document.cookie = coo; ?
+                document.cookie = "url=" + urlStr + ";expires=" + d.toUTCString() + ";path=/"
+                document.cookie = "port=" + portStr + ";expires=" + d.toUTCString() + ";path=/"
+                document.cookie = "slotName=" + nameStr + ";expires=" + d.toUTCString() + ";path=/"
+            }
+
+            function getCookiesList() {
+                let decodedCookies = decodeURIComponent(document.cookie);
+                let fullCookieList = decodedCookies.split(";");
+                const cookieList = [];
+                cookieList["url"] = "";
+                cookieList["port"] = "";
+                cookieList["slotName"] = "";
+                for(let i = 0; i < fullCookieList.length; i++) {
+                    let coo = fullCookieList[i]
+                    while (coo.charAt(0) == ' ') {
+                        coo = coo.substring(1);
+                    }
+                    cParts = coo.split("=");
+                    cookieList[cParts[0]] = cParts[1];
+                }
+                return cookieList;
+            }
+
+            document.addEventListener("DOMContentLoaded", function() {
+                let myCookies = getCookiesList();
+                if (myCookies["url"] != "") {
+                    document.getElementById("txt-server-url").value = myCookies["url"];
+                }
+                if (myCookies["port"] != "") {
+                    document.getElementById("txt-server-port").value = myCookies["port"];
+                }
+                if (myCookies["slotName"] != "") {
+                    document.getElementById("txt-slot-name").value = myCookies["slotName"];
+                }
+                document.getElementById("connect-button").addEventListener("click", function() {
+                    url = document.getElementById("txt-server-url");
+                    port = document.getElementById("txt-server-port");
+                    slotName = document.getElementById("txt-slot-name");
+                    password = document.getElementById("txt-server-password");
+                    var filled = true;
+                    if (url.value == "") {
+                        url.classList.add("error");
+                        filled = false;
+                    }
+                    else {
+                        url.classList.remove("error");
+                    }
+                    if (port.value == "") {
+                        port.classList.add("error");
+                        filled = false;
+                    }
+                    else if (!/^\\d+$/.test(port.value)) {
+                        port.classList.add("error");
+                        filled = false;
+                    }
+                    else {
+                        port.classList.remove("error");
+                    }
+                    if (slotName.value == "") {
+                        slotName.classList.add("error");
+                        filled = false;
+                    }
+                    else {
+                        slotName.classList.remove("error");
+                    }
+                    if (filled) {
+                        storeCookies(url.value, port.value, slotName.value);
+                        document.getElementById("frm-connection").submit();
+                    }
+                })
+            });
+        </script>
+    </head>
+    <body>
+        <div class="container">
+            <div class="row">
+                <div class="col-0 col-lg-2"></div>
+                <div class="col-12 col-sm-6 col-lg-4 my-auto">
+                    <img src="https://archipelago.gg/static/static/branding/header-logo.svg" alt="AP logo">
+                </div>
+                <div class="col-12 col-sm-6 col-lg-4 my-auto">
+                    <img src="https://www.bombmanual.com/img/header.png" alt="KTANE logo">
+                </div>
+                <div class="col-0 col-lg-2"></div>
+            </div>
+            <div class="row">
+                <div class="col-0 col-lg-2"></div>
+                <div class="col-12 col-lg-8">
+                    <form method="POST" id="frm-connection" accept-charset="UTF-8">
+                        <input type="hidden" name="post-command" value="connect">
+                        <div class="container connection-section">
+                            <div class="row">
+                                <div class="col-12">
+                                    <span class="title">Connection:</span>
+                                </div>
+                            </div>
+                            <div class="row input-field-row">
+                                <div class="col-0 col-xl-1"></div>
+                                <div class="col-12 col-sm-4 col-xl-3 my-auto"><label for="txt-server-url">Server URL:</label></div>
+                                <div class="col-12 col-sm-8 col-xl-7">
+                                    <input type="text" id="txt-server-url" name="server-url" class="text-input">
+                                    <!--
+                                    <input type="text" id="txt-server-url" name="server-url" class="text-input" value="{playerInfo["cdUrl"]}">
+                                    -->
+                                </div>
+                                <div class="col-0 col-xl-1"></div>
+                            </div>
+                            <div class="row input-field-row">
+                                <div class="col-0 col-xl-1"></div>
+                                <div class="col-12 col-sm-4 col-xl-3 my-auto"><label for="txt-server-port">Server Port:</label></div>
+                                <div class="col-12 col-sm-8 col-xl-7">
+                                    <input type="text" id="txt-server-port" name="server-port" class="text-input">
+                                    <!--
+                                    <input type="text" id="txt-server-port" name="server-port" class="text-input" value="{playerInfo["cdPort"]}">
+                                    -->
+                                </div>
+                                <div class="col-0 col-xl-1"></div>
+                            </div>
+                            <div class="row input-field-row">
+                                <div class="col-0 col-xl-1"></div>
+                                <div class="col-12 col-sm-4 col-xl-3 my-auto"><label for="txt-slot-name">Slot Name:</label></div>
+                                <div class="col-12 col-sm-8 col-xl-7">
+                                    <input type="text" id="txt-slot-name" name="slot-name" class="text-input">
+                                    <!--
+                                    <input type="text" id="txt-slot-name" name="slot-name" class="text-input" value="{playerInfo["cdName"]}">
+                                    -->
+                                </div>
+                                <div class="col-0 col-xl-1"></div>
+                            </div>
+                            <div class="row input-field-row">
+                                <div class="col-0 col-xl-1"></div>
+                                <div class="col-12 col-sm-4 col-xl-3 my-auto"><label for="txt-server-password">Server Password:</label></div>
+                                <div class="col-12 col-sm-8 col-xl-7">
+                                    <input type="text" id="txt-server-password" name="server-password" class="text-input">
+                                    <!--<input type="text" id="txt-server-password" name="server-password" class="text-input" value="{playerInfo["cdPass"]}">-->
+                                </div>
+                                <div class="col-0 col-xl-1"></div>
+                            </div>
+                            <div class="row">
+                                <div class="col-0 col-sm-2 col-lg-4"></div>
+                                <div class="col-12 col-sm-8 col-lg-4"><input id="connect-button" class="button" type="button" value="Connect" disabled></div>
+                                <div class="col-0 col-sm-2 col-lg-4"></div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="col-0 col-lg-2"></div>
+            </div>
+            <div class="row">
+                <div class="col-0 col-lg-2"></div>
+                <!-- Pass in versionNumber! -->
+                <div class="col-12 col-lg-8">Version <!--{versionNumber}--></div>
+                <div class="col-0 col-lg-2"></div>
+            </div>
+        </div>
+    </body>
+</html>
